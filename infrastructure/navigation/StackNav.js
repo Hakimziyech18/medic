@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Home } from "../screens/Home";
-import { Intro } from "../screens/Intro";
+import { Intro } from "../screens/Intro";   
 import { Signup } from "../screens/Signup";
 import { Login } from "../screens/Login";
 import { Profile } from "../screens/Profile";

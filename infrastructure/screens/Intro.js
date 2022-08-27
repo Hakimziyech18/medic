@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { Questrial_400Regular } from "@expo-google-fonts/questrial";
-import { FontAwesome, FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {faCross } from '@fortawesome/free-solid-svg-icons';
 import { faCircleInfo} from '@fortawesome/free-solid-svg-icons';
 import {Button} from 'react-native-paper';
