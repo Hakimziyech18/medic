@@ -4,7 +4,7 @@ export const Theme = {
       brandRed: "#FF1E00",brandGreen: "#59CE8F",brandDark: "#000000",brandMuted:'#E8F9FD'
     },
     ui: {
-      nursePurple:'#FF06B7',nurseGray:'#3C2C3E',nurseDullGreen:'#4B5D67',nurseGreen:'#BDF2D5'
+      nursePurple:'#FF06B7',nurseGray:'#3C2C3E',nurseDullGreen:'#4B5D67',nurseGreen:'#BDF2D5',darkGreen:'#224B0C',
     },
     bg: {
       primary: "#F6F6F6",secondary: "#EEEEEE", tertiary: "#DFDFDE", quartenary: "#73777B"

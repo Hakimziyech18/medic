@@ -1,13 +1,34 @@
 import { useState, useEffect, useCallback } from "react";
-import { View, Text, TextInput, SafeAreaView, StyleSheet, ImageBackground} from 'react-native'
+import { View, Text, TextInput, SafeAreaView, StyleSheet, ImageBackground, TouchableOpacity, FlatList} from 'react-native'
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { Questrial_400Regular } from "@expo-google-fonts/questrial";
 import { FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
-import {faCross} from "@fortawesome/free-solid-svg-icons";
+import {faCross, faFileLines} from "@fortawesome/free-solid-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { faStethoscope } from "@fortawesome/free-solid-svg-icons";
+import { faUserDoctor } from "@fortawesome/free-solid-svg-icons";
+import { faHouseMedical } from "@fortawesome/free-solid-svg-icons";
+import { faTruckMedical } from "@fortawesome/free-solid-svg-icons";
+import { faPerson } from "@fortawesome/free-solid-svg-icons";
+import { faFill } from "@fortawesome/free-solid-svg-icons";
+import { faPills } from "@fortawesome/free-solid-svg-icons";
+import { faNewspaper } from "@fortawesome/free-solid-svg-icons";
 import { Theme } from '../components/Theme';
+
+/* diagnosis,consultation,Clinic,Ambulance,Therapy,Prescription,Meds,Artcicles */
+// service components names
+const services = [
+    {id:1,serviceName:'Diagnosis',serviceIcon:faStethoscope},
+    {id:2,serviceName:'Consultation',serviceIcon:faUserDoctor},
+    {id:3,serviceName:'Clinic',serviceIcon:faHouseMedical},
+    {id:4,serviceName:'Ambulance',serviceIcon:faTruckMedical},
+    {id:5,serviceName:'Therapy',serviceIcon:faPerson},
+    {id:6,serviceName:'Prescription',serviceIcon:faFileLines},
+    {id:7,serviceName:'Medicine',serviceIcon:faPills},
+    {id:8,serviceName:'Articles',serviceIcon:faNewspaper},
+]
 
 export function Home ({navigation}) {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -70,6 +91,27 @@ export function Home ({navigation}) {
                             <Text style={styles.brandMessageSmall}>for all medical emergencies</Text>
                         </View>
                     </ImageBackground>
+
+                    <Text style={styles.serviceHeading}>What do yo need?</Text>
+                    <View style={styles.serviceRow}>
+                        <FlatList
+                            data={services}
+                            renderItem={({item}) => {
+                                return (
+                                    <TouchableOpacity style={styles.service}>
+                                        <FontAwesomeIcon 
+                                        icon={item.serviceIcon}
+                                        size={48}
+                                        color='white'
+                                        />
+                                        <Text style={styles.serviceName}>{item.serviceName}</Text>
+                                    </TouchableOpacity>
+                                )
+                            }}
+                            key={({item}) => item.id}
+                            horizontal
+                        />
+                    </View>
 
             </View>
       </SafeAreaView>
@@ -143,5 +185,32 @@ const styles = StyleSheet.create({
     brandMessageSmall:{
         fontSize:Theme.fonts.fontSize.title,
         marginTop:Theme.sizes[3],
+        color:Theme.colors.ui.darkGreen,
+        shadowColor:'black',
+        shadowOffset:{width:4,height:4},
+        shadowRadius:4,
+        shadowOpacity:0.8,
+        elevation:5,
+    },
+    serviceHeading:{
+        fontSize:Theme.fonts.fontSize.body,
+        marginVertical:Theme.sizes[3],
+    },
+    serviceRow:{
+        flexDirection:'row',
+        flexWrap:'wrap',
+        justifyContent:'space-between'
+    },
+    service:{
+        height:80,
+        width:80,
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:Theme.colors.ui.darkGreen,
+        borderRadius:10,
+    },
+    serviceName:{
+        color:'indigo',
+        fontWeight:'bold'
     },
 });

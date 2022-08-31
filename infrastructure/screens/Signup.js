@@ -77,7 +77,7 @@ export function Signup({navigation}){
                     : null
                     }
 
-                    <Button mode='contained' color={accountType == 'provider' ? Theme.colors.ui.nurseGray : Theme.colors.ui.nursePurple } style={{paddingVertical:Theme.sizes[3], marginTop:Theme.sizes[2]}}> Create account</Button>
+                    <Button mode='contained' color={accountType == 'provider' ? Theme.colors.ui.nurseGray : Theme.colors.ui.nursePurple } style={{paddingVertical:Theme.sizes[3], marginTop:Theme.sizes[2]}} onPress={() => navigation.navigate('Home')}> Create account</Button>
 
                     {/* navigating to login screen*/}
                     <View style={styles.textInline}>

@@ -52,7 +52,15 @@ export function Login({navigation}){
                     <TouchableOpacity
                         onPress={() => navigation.navigate('Home')}>
                             <Button mode='contained' color={Theme.colors.ui.nursePurple } style={{paddingVertical:Theme.sizes[3], marginTop:Theme.sizes[2]}}> Log in </Button>
+                    </TouchableOpacity>
+
+                    <View style={styles.textInline}>
+                        <Text style={styles.ctaText}>Don't have an account? </Text>
+                        <TouchableOpacity
+                        onPress={() => navigation.navigate('Signup')}>
+                            <Text style={[styles.ctaText,{color:Theme.colors.ui.nurseGreen}]}>Go to Sign up</Text>
                         </TouchableOpacity>
+                    </View>
                 </ScrollView>
             </View>
         </SafeAreaView>
@@ -78,5 +86,12 @@ const styles = StyleSheet.create({
     headText:{
         fontSize:Theme.fonts.fontSizePoint.h3,
         marginVertical:Theme.sizes[4],
+    },
+    textInline:{
+        flexDirection:'row',
+        marginVertical:Theme.sizes[2],
+    },
+    ctaText:{
+        fontSize:Theme.fonts.fontSize.body
     },
 });
