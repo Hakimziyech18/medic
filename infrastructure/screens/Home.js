@@ -19,7 +19,10 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStarHalf } from "@fortawesome/free-solid-svg-icons";
 import { Theme } from '../components/Theme';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
+import { Profile } from "./Profile";
+import { Notifications } from "./Notifications";
+import { History } from "./History";
+import { Ionicons } from '@expo/vector-icons'
 
 const Tab = createBottomTabNavigator(); 
 // service components names
@@ -35,31 +38,31 @@ const services = [
 ]
 
 const topProviders = [
-    {id:1,proName:'Mayo Clinic',rating:[4,5,5,5,4,4,5],logo:'https://cdn-icons-png.flaticon.com/512/2869/2869818.png'},
-    {id:2,proName:'Hakimi Lab',rating:[5,5,4,5,4,5,5],logo:'https://cdn-icons-png.flaticon.com/512/1048/1048611.png'},
-    {id:3,proName:'Elikeem Maternity',rating:[4,4,5,5,5,4,4],logo:'https://cdn-icons-png.flaticon.com/512/8355/8355694.png'},
-    {id:4,proName:'Beelah Clinic',rating:[5,5,4,5,5,4,5],logo:'https://cdn-icons-png.flaticon.com/512/3901/3901586.png'},
-    {id:5,proName:'Onehi Lab',rating:[5,5,4,5,4,4,5],logo:'https://cdn-icons-png.flaticon.com/512/8353/8353823.png'},
+    {id:1,proName:'Hakimi Lab',rating:[5,5,4,5,4,5,5],logo:'https://cdn-icons-png.flaticon.com/512/2869/2869818.png'},
+    {id:2,proName:'Onehi Pharmaceuticals',rating:[5,5,4,5,4,4,5],logo:'https://cdn-icons-png.flaticon.com/512/1048/1048611.png'},
+    {id:3,proName:'Beelah Clinic',rating:[4,4,5,5,5,4,4],logo:'https://cdn-icons-png.flaticon.com/512/8355/8355694.png'},
+    {id:4,proName:'Reed Medical Equipments',rating:[5,5,4,5,5,4,5],logo:'https://cdn-icons-png.flaticon.com/512/3901/3901586.png'},
+    {id:5,proName:'Elikeem Lab',rating:[4,5,5,5,4,4,5],logo:'https://cdn-icons-png.flaticon.com/512/8353/8353823.png'},
     {id:6,proName:'Sule Maternity',rating:[5,5,4,5,4,4,5],logo:'https://cdn-icons-png.flaticon.com/512/8351/8351887.png'},
 ]
 
 const HomeScreen = () => {
     return (
         <SafeAreaView style={styles.areaView}>
-            <View style ={styles.container}>
             <ScrollView>
-            <View style={styles.header}>
+            <View style ={styles.container}>
+                <View style={styles.header}>
                     <View style={styles.leftContent}>
-                    <Text style={styles.hearderText}>Hello, Zohreh!</Text>
-                    <Text style={styles.subHeadTextText}>Female, 23</Text>
+                        <Text style={styles.hearderText}>Hello, Zohreh!</Text>
+                        <Text style={styles.subHeadTextText}>Female, 23</Text>
                     </View>
 
                     <View style={styles.rightContent}>
-                    <FontAwesomeIcon 
-                    icon={faBell} 
-                    size={30}
-                    color={Theme.colors.ui.nurseGray}
-                    />
+                        <FontAwesomeIcon 
+                        icon={faBell} 
+                        size={30}
+                        color={Theme.colors.ui.nurseGray}
+                        />
                     </View>
                     
                 </View>
@@ -98,32 +101,58 @@ const HomeScreen = () => {
                             ))
                         }
                     </View>
-                    <View style={styles.topProvidersBlock}>
-                    <Text style={styles.topProvidersHeading}> Most rated providers</Text>    
-                    <FlatList
-                    data={topProviders}
-                    renderItem={({item}) => (
-                        <View style={styles.providerItem}>
-                            <Image source={{uri:item.logo}} style={styles.providerLogo}/>
-                            <View style={styles.providerDetails}>
-                                <Text style={styles.providerName}>{item.proName}</Text>
-                                <View style={styles.rating}>
-                                    <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
-                                    <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
-                                    <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
-                                    <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
-                                    <FontAwesomeIcon icon={faStarHalf} color='gold' size={Theme.sizes[4]}/>
-                                </View>
 
-                            </View>
+
+                        <View style={styles.topProvidersBlock}>
+                            <Text style={styles.topProvidersHeading}> Most rated providers</Text>    
+                            <FlatList
+                            data={topProviders}
+                            renderItem={({item}) => (
+                                <View style={styles.providerItem}>
+                                    <Image source={{uri:item.logo}} style={styles.providerLogo}/>
+                                    <View style={styles.providerDetails}>
+                                        <Text style={styles.providerName}>{item.proName}</Text>
+                                        <View style={styles.rating}>
+                                            
+                                            <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
+                                            <FontAwesomeIcon icon={faStarHalf} color='gold' size={Theme.sizes[4]}/>
+                                        </View>
+
+                                    </View>
+                                </View>
+                            )}
+                            key={item => item.id}
+                            horizontal={true}
+                            />
                         </View>
-                    )}
-                    key={item => item.id}
-                    horizontal={true}
-                    />
-                    </View>
-            </ScrollView>
+
+
+                        <View style={styles.topProvidersBlock}>
+                            <Text style={[styles.topProvidersHeading, {color:Theme.colors.ui.nurseGray}]}> Featured providers</Text>    
+                            <FlatList
+                            data={topProviders}
+                            renderItem={({item}) => (
+                                <View style={styles.providerItemFeatured}>
+                                    <Image source={{uri:item.logo}} style={styles.providerLogo}/>
+                                    <View style={styles.providerDetails}>
+                                        <Text style={styles.providerName}>{item.proName}</Text>
+                                        <View style={styles.rating}>
+                                            <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
+                                            <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
+                                            <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
+                                            <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
+                                            <FontAwesomeIcon icon={faStarHalf} color='gold' size={Theme.sizes[4]}/>
+                                        </View>
+
+                                    </View>
+                                </View>
+                            )}
+                            key={item => item.id}
+                            horizontal={true}
+                            />
+                        </View>
             </View>
+            </ScrollView>
       </SafeAreaView>
     )
 }
@@ -156,8 +185,31 @@ export function Home ({navigation}) {
   }
 
   return (
-    <Tab.Navigator>
-        <Tab.Screen name='Home' component={HomeScreen} />
+    <Tab.Navigator
+        screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+    
+          if (route.name === 'HomeScreen') {
+            iconName = focused ? 'home-sharp' : 'home-outline' ;
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'ios-person-circle' : 'ios-person-circle-outline';
+          } else if (route.name === 'History') {
+            iconName = focused ? 'md-file-tray-stacked' : 'ios-file-tray-stacked-outline';
+          } else if (route.name === 'Notifications') {
+            iconName = focused ? 'notifications' : 'notifications-outline';
+          }
+    
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: Theme.colors.ui.nursePurple,
+        tabBarInactiveTintColor: Theme.colors.ui.darkGreen,
+      })}
+      >
+        <Tab.Screen name='HomeScreen' component={HomeScreen} options={{headerShown:false}}/>
+        <Tab.Screen name='Profile' component={Profile} options={{headerShown:false}}/>
+        <Tab.Screen name='Notifications' component={Notifications} options={{headerShown:false}}/>
+        <Tab.Screen name='History' component={History} options={{headerShown:false}}/>
     </Tab.Navigator>
 );
 }
@@ -277,6 +329,13 @@ const styles = StyleSheet.create({
         marginRight:Theme.sizes[1],
         padding:Theme.sizes[4],
         backgroundColor:Theme.colors.ui.darkGreen,
+    },
+    providerItemFeatured:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginRight:Theme.sizes[1],
+        padding:Theme.sizes[4],
+        backgroundColor:Theme.colors.ui.nurseGray,
     },
     providerLogo:{
        width:64,
