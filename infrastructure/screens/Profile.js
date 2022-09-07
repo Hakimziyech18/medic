@@ -47,17 +47,11 @@ export function Profile({navigation}){
         <SafeAreaView style={styles.areaView}>
             <View style={styles.container}>
                 <ScrollView>
-                    <ImageBackground source={require('../../assets/images/nursemap.jpeg')}
+                    <ImageBackground source={require('../../assets/images/map.jpg')}
                         resizeMode='cover'
                         style={styles.headerBg}
                         >
-                            <View style={styles.headerBgLayer}>
-                                <Text style={styles.brandMessage}>Skilled medical</Text>
-                                <Text style={styles.brandMessage}>professionals</Text>
-                                <Text style={styles.brandMessageSmall}>for all medical emergencies</Text>
-                            </View>
-                    </ImageBackground>
-                    <View style={styles.semicontainer}>
+                        <View style={styles.semicontainer}>
                         <View style={styles.docProfile}>
                             <Image
                                 source={require('../../assets/images/doctor.jpg')}
@@ -131,6 +125,7 @@ export function Profile({navigation}){
                             <Button mode='contained' color={Theme.colors.ui.nursePurple } style={{paddingVertical:Theme.sizes[2], marginTop:Theme.sizes[2], borderRadius:10}}>Request for an appointment</Button>
                         </TouchableOpacity>
                     </View>
+                    </ImageBackground>
                 </ScrollView>
             </View>
         </SafeAreaView>
@@ -144,18 +139,13 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
     },
+    headerBg:{
+        height:190
+    },
     semicontainer:{
         flex:1,
         paddingHorizontal:Theme.sizes[3],
         paddingTop:Theme.sizes[5],
-    },
-    headerBg:{
-        height:200,
-    },
-    headerBgLayer:{
-        flex:1,
-        padding:Theme.sizes[3],
-        backgroundColor:'rgba(189,242,213,0.4)',
     },
     docProfile:{
         flexDirection:'row',
