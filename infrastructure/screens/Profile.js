@@ -5,17 +5,11 @@ import * as Font from 'expo-font';
 import { Questrial_400Regular } from "@expo-google-fonts/questrial";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {faCross } from '@fortawesome/free-solid-svg-icons';
-import {Button, TextInput} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import { Theme } from '../components/Theme';
 import { faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-
-const services = [
-    {id:1,serviceIcon:faPhone },
-    {id:2,serviceIcon:faMessage},
-    {id:3,serviceIcon:faEnvelope},
-]
 
 export function Profile({navigation}){
     const [appIsReady, setAppIsReady] = useState(false);
@@ -120,10 +114,9 @@ export function Profile({navigation}){
                                 <TouchableOpacity><View style={styles.docSpecialtywrap}><Text style={styles.docSpecColor}>Pathology</Text></View></TouchableOpacity>
                             </View>
                         </View>
-                        <TouchableOpacity
-                        onPress={() => navigation.navigate('Intro')}>
-                            <Button mode='contained' color={Theme.colors.ui.nursePurple } style={{paddingVertical:Theme.sizes[2], marginTop:Theme.sizes[2], borderRadius:10}}>Request for an appointment</Button>
-                        </TouchableOpacity>
+                    
+                            <Button mode='contained' color={Theme.colors.ui.nursePurple } onPress={() => navigation.navigate('Intro')} style={{paddingVertical:Theme.sizes[2], marginTop:Theme.sizes[2], borderRadius:10}}>Request for an appointment</Button>
+
                     </View>
                     </ImageBackground>
                 </ScrollView>
