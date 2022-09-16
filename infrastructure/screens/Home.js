@@ -46,6 +46,8 @@ const topProviders = [
     {id:6,proName:'Sule Maternity',rating:[5,5,4,5,4,4,5],logo:'https://cdn-icons-png.flaticon.com/512/8351/8351887.png'},
 ]
 
+
+
 const HomeScreen = () => {
     return (
         <SafeAreaView style={styles.areaView}>
@@ -352,4 +354,4 @@ const styles = StyleSheet.create({
     rating:{
        flexDirection:'row',
     },
-});
+}); 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import {View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
+import {View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { Questrial_400Regular } from "@expo-google-fonts/questrial";
@@ -7,11 +7,80 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {faCross } from '@fortawesome/free-solid-svg-icons';
 import {Button, TextInput} from 'react-native-paper';
 import { Theme } from '../components/Theme';
-
+import { authentication, db } from '../../Services/Firebase'; 
+import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 export function Signup({navigation}){
     const [appIsReady, setAppIsReady] = useState(false);
     const [accountType, setAccountType] = useState('individual');
+    const [firstName,setFirstName] = useState('');
+    const [lastName,setLastName] = useState('');
+    const [phone,setPhone] = useState('');
+    const [email,setEmail] = useState('');
+    const [password,setPassword] = useState('');
+    const [desc,setDesc] = useState('');
+
+    //timestamp generator
+    const getNewTimestanp = () => {
+        const now = new Date ();
+        return now.getTime();
+    }
+
+    const providerRecordTemplate = {
+        accountType:accountType,
+        firstName:firstName,
+        lastName:lastName,
+        phoneNumber:phone,
+        ratings:[4,5,3,4,5],
+        geoPoint:{Latitude:9.775849382, Longitude:3.5473828945},
+        specialization:'Community Pharmacy',
+        specialties:['Therapy','Community Pharmacy','Clinical Pharmacy'],
+        description:'Haven worked in the public sector for more than 15 years, I have gathered lots of experience',
+        timestamp:getNewTimestanp()
+    }
+    const customerRecordTemplate = {
+        accountType:accountType,
+        firstName:firstName,
+        lastName:lastName,
+        phoneNumber:phone,
+        geoPoint:{Latitude:9.775849382, Longitude:3.5473828945},
+        timestamp:getNewTimestanp()
+    }
+//create an authenticated user
+
+//CRUD-craete date,read data,delete data
+function createUser() {
+    createUserWithEmailAndPassword(authentication,email,password)
+    .then(() => onAuthStateChanged(authentication,(user) => {
+            const userUID = user.uid;
+            //insert other records of firestore
+            if (accountType==='provider') {
+                setDoc(doc(db,'users','biodata'),providerRecordTemplate)
+                .then(() => navigation.navigate('Home'))
+                .catch(() => Alert.alert(
+                    'Status',
+                    'Failed while interracting with database',
+                    [{text:'Back to Intro',onPress:navigation.navigate('Login')}]
+                ))
+            } else if(accountType==='individual') {
+                setDoc(doc(db,'users','biodata'),customerRecordTemplate)
+                .then(() => navigation.navigate('Home'))
+                .catch(() => Alert.alert(
+                    'Status',
+                    'Failed while interracting with database',
+                    [{text:'Back to Intro',onPress:navigation.navigate('Login')}]
+                ))
+                
+            }
+        })
+    )
+    .catch((error) => Alert.alert(
+        'Status',
+        'Failed while interracting with database',
+        [{text:'Back to Intro',onPress:navigation.navigate('Intro')}]
+    ))
+}
 
     useEffect(() => {
         async function prepare() {
@@ -64,11 +133,16 @@ export function Signup({navigation}){
                         {accountType == 'individual' ? 'Create an individual account' : 'Create a provider account' }
                     </Text>
 
-                    <TextInput label='First name' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary}/>
-                    <TextInput label='Last name' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary}/>
-                    <TextInput label='Phone number' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary} keyboardType='phone-pad'/>
-                    <TextInput label='Email address' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary} keyboardType='email-address'/>
-                    <TextInput label='Create password' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary} secureTextEntry={true}/>
+                    <TextInput label='First name' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary}
+                    onChangeText={(text) => setFirstName(text)}/>
+                    <TextInput label='Last name' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary}
+                    onChangeText={(text) => setLastName(text)}/>
+                    <TextInput label='Phone number' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary} keyboardType='phone-pad'
+                    onChangeText={(text) => setPhone(text)}/>
+                    <TextInput label='Email address' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary} keyboardType='email-address'
+                    onChangeText={(text) => setEmail(text)}/>
+                    <TextInput label='Create password' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary} secureTextEntry={true}
+                    onChangeText={(text) => setPassword(text)}/>
                     <TextInput label='Confirm password' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary} secureTextEntry={true}/>
 
                     {/*only show up if accoun type is provider*/}
@@ -77,7 +151,7 @@ export function Signup({navigation}){
                     : null
                     }
 
-                    <Button mode='contained' color={accountType == 'provider' ? Theme.colors.ui.nurseGray : Theme.colors.ui.nursePurple } style={{paddingVertical:Theme.sizes[3], marginTop:Theme.sizes[2]}} onPress={() => navigation.navigate('Home')}> Create account</Button>
+                    <Button mode='contained' color={accountType == 'provider' ? Theme.colors.ui.nurseGray : Theme.colors.ui.nursePurple } style={{paddingVertical:Theme.sizes[3], marginTop:Theme.sizes[2]}} onPress={createUser}> Create account</Button>
 
                     {/* navigating to login screen*/}
                     <View style={styles.textInline}>

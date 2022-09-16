@@ -115,7 +115,7 @@ export function Profile({navigation}){
                             </View>
                         </View>
                     
-                            <Button mode='contained' color={Theme.colors.ui.nursePurple } onPress={() => navigation.navigate('Intro')} style={{paddingVertical:Theme.sizes[2], marginTop:Theme.sizes[2], borderRadius:10}}>Request for an appointment</Button>
+                        <Button mode='contained' color={Theme.colors.ui.nursePurple } onPress={() => navigation.navigate('Intro')} style={{paddingVertical:Theme.sizes[2], marginTop:Theme.sizes[2], borderRadius:10}}>Request for an appointment</Button>
 
                     </View>
                     </ImageBackground>

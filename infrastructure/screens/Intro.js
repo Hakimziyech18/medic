@@ -49,8 +49,8 @@ export function Intro({navigation}){
                     <Text style={styles.brandInfo}>Easier and faster solution for any medical emergencies</Text>
                 </View>
                 <View style={styles.authContainer}>
-                    <Button mode='contained' color={Theme.colors.text.tertiary} style={{paddingVertical:Theme.sizes[3],marginBottom:Theme.sizes[3]}} onPress={() => navigation.navigate('Signup') }>SIGN UP</Button>
-                    <Button mode='outlined' color={Theme.colors.text.tertiary} style={{paddingVertical:Theme.sizes[3]}} onPress={() => navigation.navigate('Login')} >SIGN IN</Button>
+                    <Button mode='contained' color={Theme.colors.text.tertiary} contentStyle={{paddingVertical:Theme.sizes[3],marginBottom:Theme.sizes[3]}} onPress={() => navigation.navigate('Signup') }>SIGN UP</Button>
+                    <Button mode='outlined' color={Theme.colors.text.tertiary} contentStyle={{paddingVertical:Theme.sizes[3]}} onPress={() => navigation.navigate('Login')} >SIGN IN</Button>
                 </View>
             </View>
         </SafeAreaView>
