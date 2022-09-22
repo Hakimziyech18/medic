@@ -1,7 +1,6 @@
 import { NavigationContainer} from '@react-navigation/native';
 import { StackNavigation } from './infrastructure/navigation/StackNav';
-import { Home } from './infrastructure/screens/Home';
-import { Services } from './infrastructure/screens/Services';
+import { ProviderHome } from './infrastructure/screens/providers/ProviderHome';
 
 
 export default function App() {
@@ -9,6 +8,6 @@ export default function App() {
     // <NavigationContainer>
     //   <StackNavigation/>
     // </NavigationContainer>
-    <Services/>
+    <ProviderHome/>
   )
 }

@@ -54,25 +54,22 @@ function createUser() {
     createUserWithEmailAndPassword(authentication,email,password)
     .then(() => onAuthStateChanged(authentication,(user) => {
             const userUID = user.uid;
-            //insert other records of firestore
-            if (accountType==='provider') {
-                setDoc(doc(db,'users','biodata'),providerRecordTemplate)
-                .then(() => navigation.navigate('Home'))
-                .catch(() => Alert.alert(
-                    'Status',
-                    'Failed while interracting with database',
-                    [{text:'Back to Intro',onPress:navigation.navigate('Login')}]
-                ))
-            } else if(accountType==='individual') {
-                setDoc(doc(db,'users','biodata'),customerRecordTemplate)
-                .then(() => navigation.navigate('Home'))
-                .catch(() => Alert.alert(
-                    'Status',
-                    'Failed while interracting with database',
-                    [{text:'Back to Intro',onPress:navigation.navigate('Login')}]
-                ))
-                
+            let userRecords;
+
+            if (accountType==='provider'){
+                userRecords = providerRecordTemplate;
+            }else if (accountType==='individual'){
+                userRecords = customerRecordTemplate;
             }
+
+            //insert other records of firestore
+            setDoc(doc,(db,'users',userUID),userRecords)
+                .then(() => navigation.navigate('Home',{userUID:userUID}))
+                .catch(() => Alert.alert(
+                    'Status',
+                    'Failed while interracting with database',
+                    [{text:'Back to Login',onPress:navigation.navigate('Login')}]
+                ))
         })
     )
     .catch((error) => Alert.alert(
@@ -141,7 +138,7 @@ function createUser() {
                     onChangeText={(text) => setPhone(text)}/>
                     <TextInput label='Email address' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary} keyboardType='email-address'
                     onChangeText={(text) => setEmail(text)}/>
-                    <TextInput label='Create password' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary} secureTextEntry={true}
+                    <TextInput label='Create password' mode='outlined' outlineColor={Theme.colors.bg.tertiary} /*secureTextEntry={true}*/ activeOutlineColor={Theme.colors.bg.quartenary} secureTextEntry={true}
                     onChangeText={(text) => setPassword(text)}/>
                     <TextInput label='Confirm password' mode='outlined' outlineColor={Theme.colors.bg.tertiary} activeOutlineColor={Theme.colors.bg.quartenary} secureTextEntry={true}/>
 
