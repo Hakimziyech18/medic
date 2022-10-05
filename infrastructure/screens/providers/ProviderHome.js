@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import {View, Text, StyleSheet, SafeAreaView, Platform, Image } from 'react-native';
+import {View, Text, StyleSheet, SafeAreaView, Platform, Image, TouchableOpacity } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { Questrial_400Regular } from "@expo-google-fonts/questrial";
@@ -45,7 +45,7 @@ export function ProviderHome({navigation}){
             <View style={styles.header}>
                     <View style={styles.leftContent}>
                         <Text style={styles.hearderText}>Hello, Emilia!</Text>
-                        <Text style={styles.subHeadTextText}>Female, 26</Text>
+                        <Text style={styles.subHeadText}>Female, 26</Text>
                     </View>
 
                     <View style={styles.rightContent}>
@@ -58,21 +58,24 @@ export function ProviderHome({navigation}){
                 </View>
 
                 <Text style={styles.recentTitle}>Your recent orders</Text>
-                <View style={styles.orderPill}>
-                    <Image 
-                    source={{uri:'https://images.pexels.com/photos/159211/headache-pain-pills-medication-159211.jpeg'}}
-                    style={styles.orderThumbnail}/>
-                    <View style={styles.orderDetails}>
-                        <Text style={styles.ordertext}>MultiVitamin for Hair Growth</Text>
-                        <View style={styles.orderHolder}>
-                            <Text style={styles.orderInfoText}>NGN23,000</Text>
-                            <Text style={styles.orderInfoText}>32 minutes ago</Text>
-                        </View>
-                        <View style={styles.orderHolder}>
-                            <Text style={styles.customerInfoText}>Adeleke Balogun at Apo District, Abuja</Text>
+                <TouchableOpacity
+                 onPress={() => navigation.navigate('Signup')}>
+                    <View style={styles.orderPill}>
+                        <Image 
+                        source={{uri:'https://images.pexels.com/photos/159211/headache-pain-pills-medication-159211.jpeg'}}
+                        style={styles.orderThumbnail}/>
+                        <View style={styles.orderDetails}>
+                            <Text style={styles.ordertext}>MultiVitamin for Hair Growth</Text>
+                            <View style={styles.orderHolder}>
+                                <Text style={styles.orderInfoText}>NGN23,000</Text>
+                                <Text style={styles.orderInfoText}>32 minutes ago</Text>
+                            </View>
+                            <View style={styles.orderHolder}>
+                                <Text style={styles.customerInfoText}>Adeleke Balogun at Apo District, Abuja</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
@@ -96,7 +99,7 @@ const styles = StyleSheet.create({
       fontWeight:'bold',
       color:Theme.colors.ui.nursePurple
     },
-    subHaedText:{
+    subHeadText:{
       color:Theme.colors.text.secondary
     },
     rightContent:{

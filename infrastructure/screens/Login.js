@@ -1,20 +1,18 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useContext } from 'react';
 import {View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
-import * as SplashScreen from 'expo-splash-screen';
-import * as Font from 'expo-font';
-import { Questrial_400Regular } from "@expo-google-fonts/questrial";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {faCross } from '@fortawesome/free-solid-svg-icons';
 import {Button, TextInput} from 'react-native-paper';
 import { Theme } from '../components/Theme';
 import { authentication } from '../../Services/Firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { onAuthStateChanged } from 'firebase/auth';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { AppContext } from '../Globals/Appcontext';
 
 
 export function Login({navigation}){
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
+    const {setUserUID,setSignedIn} = useContext(AppContext)
 
     function LoginAuth(){
         signInWithEmailAndPassword(authentication,email,password)
@@ -22,9 +20,9 @@ export function Login({navigation}){
             const user = userCredential.user;
             
             onAuthStateChanged(authentication,(currentUser) => {
-                navigation.navigate('Home',{
-                    userUID:currentUser.uid,
-                })
+                setUserUID(currentUser.uid);
+                setSignedIn(true);
+                navigation.navigate('Home')
             })
         })
     }

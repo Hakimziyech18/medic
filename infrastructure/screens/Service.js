@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleDown, faAngleUp, faLocationDot, faNoteSticky,faWallet } from '@fortawesome/free-solid-svg-icons';
 import MapView,{PROVIDER_GOOGLE} from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { db } from '../../Services/Firebase';
+import { onSnapshot,doc } from 'firebase/firestore';
 
 
 const {width,height} = Dimensions.get('window');
@@ -21,6 +23,16 @@ const INITIAL_POSITION = {
 
 export function Service () {
     const [tap,setTap] = useState(false);
+    const [service,setService] = useState([]); //hold service data from firestore
+    const {serviceUID} = route.params; // setup from service.js and categories.js
+
+    useEffect(() => {
+        onSnapshot(doc(db, "services", serviceUID), (doc) => {
+            setService(doc.data());
+        })
+      },[]);
+
+      console.log(service);
 
     return (
         <SafeAreaView style={styles.areaView}>
@@ -32,11 +44,11 @@ export function Service () {
                 />
                 <View style={styles.serviceHeaders}>
                     <Image 
-                    source={require('../../assets/images/services/diagnosis-service.webp')} 
+                    source={{uri:service.imageUrl}} 
                     style={styles.serviceImg}
                     />
                     <View style={styles.headersInfo}>
-                        <Text style={styles.title}>Diagnosis for Need of Bone Calcium</Text>
+                        <Text style={styles.title}>{service.title}</Text>
                         <View style={styles.subHeadersInfo}>
                             <TouchableOpacity>
                                 <Text style={styles.subHeadersText}>Diagnosis</Text>
@@ -70,31 +82,20 @@ export function Service () {
                                 size={Theme.sizes[3]} 
                                 color={Theme.colors.brand.brandGreen} 
                                 style={{marginRight:4}}/>
-                                <Text style={styles.priceInfo}>NGN23,500</Text>
+                                <Text style={styles.priceInfo}>NGN{service.price}</Text>
                             </View>
                         </View>
                         <Text>
-                            Z Medicals Laboratory is a state of the art laboratory in the city of Abuja, 
-                            which offers a fully automated laboratory services in various sub-specialties. 
-                            With the innovative use of new technologies.
+                            {service.description}
                         </Text>
                     </View>
-                    <View style={styles.serviceActions}>
-                        <GooglePlacesAutocomplete
-                        placeholder='Search for your location'
-                            query={{
-                                key:'AIzaSyAK6JCZCajZOmz0_KYiSmU63ThfD7tlLLo',
-                                language:'en'
-                            }}
-                            minLenght={3}
-                            enablePoweredByContainer={false}
-                            onPress={(data,details = null) => {
-                                console.log('Details are as follow',details)
-                            }}
-                            fetchDetails={true}
-                            nearbyPlacesAPI='GooglePlacesSearch'
-                        />
-                    </View>
+                       
+                    <Button 
+                        mode='contained'
+                        contentStyle={{paddingVertical:Theme.sizes[2]}}
+                        onPress={() => navigation.navigate('Pay',{userUID:'',userEmail:'suleadoyiza@gmail.com',serviceUID:serviceUID,price:service.price})}
+                        >BOOK SERVICE
+                    </Button>
             </View>
         </SafeAreaView>
     )

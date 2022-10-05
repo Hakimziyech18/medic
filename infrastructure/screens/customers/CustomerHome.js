@@ -1,10 +1,13 @@
+import { useState, useContext, useEffect } from 'react';
 import { View, Text, TextInput, SafeAreaView, StyleSheet, ImageBackground, TouchableOpacity, FlatList, Image, ScrollView} from 'react-native'
 import { Theme } from '../../components/Theme';
-import { Questrial_400Regular } from "@expo-google-fonts/questrial";
+import { AppContext } from '../../Globals/Appcontext';
+import { onSnapshot,doc } from 'firebase/firestore';
+import { db } from '../../../Services/Firebase';
 import { FontAwesomeIcon} from "@fortawesome/react-native-fontawesome";
-import {faCross, faFileLines} from "@fortawesome/free-solid-svg-icons";
+import { faFileLines} from "@fortawesome/free-solid-svg-icons";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStarHalf } from "@fortawesome/free-solid-svg-icons";
 import { faStethoscope } from "@fortawesome/free-solid-svg-icons";
@@ -25,7 +28,7 @@ const services = [
     {id:5,serviceName:'Therapy',serviceIcon:faPerson},
     {id:6,serviceName:'Prescription',serviceIcon:faFileLines},
     {id:7,serviceName:'Medicine',serviceIcon:faPills},
-    {id:8,serviceName:'Articles',serviceIcon:faNewspaper},
+    {id:8,serviceName:'article',serviceIcon:faNewspaper},
 ]
 
 const topProviders = [
@@ -38,28 +41,35 @@ const topProviders = [
 ]
 
 export const CustomerHome = ({navigation}) => {
+    const {userUID,userBioData,setUserBioData} = useContext(AppContext)
+
+    //get users record 
+    useEffect(() => {
+        onSnapshot(doc(db, "users", userUID), (doc) => {
+            const data = doc.data();
+            let userData = {email:'',firstName:data.firstName,lastName:data.lastName};
+            setUserBioData(userData);
+            
+        })
+      },[]);
+
     return (
         <SafeAreaView style={styles.areaView}>
             <ScrollView>
             <View style ={styles.container}>
                 <View style={styles.header}>
                     <View style={styles.leftContent}>
-                        <Text style={styles.hearderText}>Hello, Zohreh!</Text>
-                        <Text style={styles.subHeadTextText}>Female, 23</Text>
+                        <Text style={styles.hearderText}>Hello, {userBioData.firstName}!</Text>
+                        <Text style={styles.subHeadTextText}>Patient</Text>
                     </View>
 
                     <View style={styles.rightContent}>
                         <FontAwesomeIcon 
-                        icon={faBell} 
+                        icon={faSignOut} 
                         size={30}
                         color={Theme.colors.ui.nurseGray}
                         />
                     </View>
-                </View>
-
-                <View style={styles.searchContainer}>
-                    <TextInput style={styles.search} placeholder='search health service'/>
-                    <FontAwesomeIcon style={styles.searchIcon} icon={faSearch} size={20}/>
                 </View>
 
                     <ImageBackground source={require('../../../assets/images/nurse.jpg')}
@@ -73,13 +83,19 @@ export const CustomerHome = ({navigation}) => {
                         </View>
                     </ImageBackground>
 
-                    <Text style={styles.serviceHeading}>What do yo need?</Text>
+                    <Text style={styles.serviceHeading}>What do you need?</Text>
                     <View style={styles.serviceRow}>
                         {
-                            Object.values(services).map(item => (
+                            Object.values(services).map((item,index) => (
+                                index == 7 ?
+                                <TouchableOpacity  style={styles.service} onPress={() => navigation.navigate('Services')}>
+                                        <FontAwesomeIcon icon={item.serviceIcon} size={38} style={{marginBottom:6}} color='white'/>
+                                        <Text style={styles.serviceName}>All Services</Text>
+                                    </TouchableOpacity>
+                                :
                                 <TouchableOpacity 
                                 style={styles.service}
-                                onPress={() => navigation.navigate('Services')}>
+                                onPress={() => navigation.navigate('Category',{categoryName:item.serviceName})}>
                                         <FontAwesomeIcon 
                                         icon={item.serviceIcon}
                                         size={38}
@@ -95,54 +111,54 @@ export const CustomerHome = ({navigation}) => {
                     </View>
 
 
-                        <View style={styles.topProvidersBlock}>
-                            <Text style={styles.topProvidersHeading}> Most rated providers</Text>    
-                            <FlatList
-                            data={topProviders}
-                            renderItem={({item}) => (
-                                <View style={styles.providerItem}>
-                                    <Image source={{uri:item.logo}} style={styles.providerLogo}/>
-                                    <View style={styles.providerDetails}>
-                                        <Text style={styles.providerName}>{item.proName}</Text>
-                                        <View style={styles.rating}>
-                                            
-                                            <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
-                                            <FontAwesomeIcon icon={faStarHalf} color='gold' size={Theme.sizes[4]}/>
-                                        </View>
-
+                    <View style={styles.topProvidersBlock}>
+                        <Text style={styles.topProvidersHeading}> Most rated providers</Text>    
+                        <FlatList
+                        data={topProviders}
+                        renderItem={({item}) => (
+                            <View style={styles.providerItem}>
+                                <Image source={{uri:item.logo}} style={styles.providerLogo}/>
+                                <View style={styles.providerDetails}>
+                                    <Text style={styles.providerName}>{item.proName}</Text>
+                                    <View style={styles.rating}>
+                                        
+                                        <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
+                                        <FontAwesomeIcon icon={faStarHalf} color='gold' size={Theme.sizes[4]}/>
                                     </View>
+
                                 </View>
-                            )}
-                            key={item => item.id}
-                            horizontal={true}
-                            />
-                        </View>
+                            </View>
+                        )}
+                        key={item => item.id}
+                        horizontal={true}
+                        />
+                    </View>
 
 
-                        <View style={styles.topProvidersBlock}>
-                            <Text style={[styles.topProvidersHeading, {color:Theme.colors.ui.nurseGray}]}> Featured providers</Text>    
-                            <FlatList
-                            data={topProviders}
-                            renderItem={({item}) => (
-                                <View style={styles.providerItemFeatured}>
-                                    <Image source={{uri:item.logo}} style={styles.providerLogo}/>
-                                    <View style={styles.providerDetails}>
-                                        <Text style={styles.providerName}>{item.proName}</Text>
-                                        <View style={styles.rating}>
-                                            <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
-                                            <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
-                                            <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
-                                            <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
-                                            <FontAwesomeIcon icon={faStarHalf} color='gold' size={Theme.sizes[4]}/>
-                                        </View>
-
+                    <View style={styles.topProvidersBlock}>
+                        <Text style={[styles.topProvidersHeading, {color:Theme.colors.ui.nurseGray}]}> Featured providers</Text>    
+                        <FlatList
+                        data={topProviders}
+                        renderItem={({item}) => (
+                            <View style={styles.providerItemFeatured}>
+                                <Image source={{uri:item.logo}} style={styles.providerLogo}/>
+                                <View style={styles.providerDetails}>
+                                    <Text style={styles.providerName}>{item.proName}</Text>
+                                    <View style={styles.rating}>
+                                        <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
+                                        <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
+                                        <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
+                                        <FontAwesomeIcon icon={faStar} color='gold' size={Theme.sizes[4]}/>
+                                        <FontAwesomeIcon icon={faStarHalf} color='gold' size={Theme.sizes[4]}/>
                                     </View>
+
                                 </View>
-                            )}
-                            key={item => item.id}
-                            horizontal={true}
-                            />
-                        </View>
+                            </View>
+                        )}
+                        key={item => item.id}
+                        horizontal={true}
+                        />
+                    </View>
             </View>
             </ScrollView>
       </SafeAreaView>
@@ -193,6 +209,7 @@ const styles = StyleSheet.create({
     },
     headerBg:{
         height:200,
+        marginVertical:10,
     },
     headerBgLayer:{
         flex:1,
@@ -231,7 +248,7 @@ const styles = StyleSheet.create({
         justifyContent:'space-evenly',
         backgroundColor:Theme.colors.ui.nurseGreen,
         paddingTop:Theme.sizes[3],
-        borderRadius:10
+        borderRadius:10,
     },
     service:{
         height:80,
@@ -244,7 +261,9 @@ const styles = StyleSheet.create({
     },
     serviceName:{
         color:'white',
-        fontWeight:'bold'
+        fontWeight:'bold',
+        textAlign:'center'
+
     },
     topProvidersBlock:{
         marginVertical:Theme.sizes[3],

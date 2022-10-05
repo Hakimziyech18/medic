@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "medik",
-    "slug": "medik",
+    "name": "Medic",
+    "slug": "medic",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/red-cross-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/red-cross-splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { Theme } from '../components/Theme';
@@ -8,14 +8,13 @@ import { Notifications } from "./Notifications";
 import { History } from "./History";
 import { CustomerHome } from "./customers/CustomerHome";
 import { Ionicons } from '@expo/vector-icons'
+import { AppContext } from "../Globals/Appcontext";
 
 const Tab = createBottomTabNavigator(); 
 
-export function Home ({navigation,route}) {
+export function Home ({navigation}) {
     const [appIsReady, setAppIsReady] = useState(false);
-
-    //access data from a previous screen
-    const {userUID} = route.params;
+    const {signedIn} = useContext(AppContext);
 
     useEffect(() => {
         async function prepare() {
@@ -42,27 +41,28 @@ export function Home ({navigation,route}) {
   }
 
   return (
-    <Tab.Navigator
-        screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-    
-          if (route.name === 'CustomerHome') {
-            iconName = focused ? 'home-sharp' : 'home-outline' ;
-          } else if (route.name === 'Profile') {
-            iconName = focused ? 'ios-person-circle' : 'ios-person-circle-outline';
-          } else if (route.name === 'History') {
-            iconName = focused ? 'md-file-tray-stacked' : 'ios-file-tray-stacked-outline';
-          } else if (route.name === 'Notifications') {
-            iconName = focused ? 'notifications' : 'notifications-outline';
-          }
-    
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: Theme.colors.ui.nursePurple,
-        tabBarInactiveTintColor: Theme.colors.ui.darkGreen,
-      })}
-      >
+    !signedIn ? navigation.navigate('Login') :
+    <Tab.Navigator 
+      screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName;
+  
+        if (route.name === 'CustomerHome') {
+          iconName = focused ? 'home-sharp' : 'home-outline' ;
+        } else if (route.name === 'Profile') {
+          iconName = focused ? 'ios-person-circle' : 'ios-person-circle-outline';
+        } else if (route.name === 'History') {
+          iconName = focused ? 'md-file-tray-stacked' : 'ios-file-tray-stacked-outline';
+        } else if (route.name === 'Notifications') {
+          iconName = focused ? 'notifications' : 'notifications-outline';
+        }
+  
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: Theme.colors.ui.nursePurple,
+      tabBarInactiveTintColor: Theme.colors.ui.darkGreen,
+    })}
+    >
         <Tab.Screen name='CustomerHome' component={CustomerHome} options={{headerShown:false}}/>
         <Tab.Screen name='Profile' component={Profile} options={{headerShown:false}}/>
         <Tab.Screen name='Notifications' component={Notifications} options={{headerShown:false}}/>
